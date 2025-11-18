@@ -6,12 +6,12 @@ public class Raycaster : MonoBehaviour
     [SerializeField] private bool   m_RaycastAll    = false;
     [SerializeField] private float  m_RayDistance   = 10.0f;
 
-    [SerializeField] UnityEngine.UI.Text m_Text;
-
     private bool        m_RayHit        = false;
     private Vector3     m_HitPoint      = Vector3.zero;
     private Vector3     m_HitNormal     = Vector3.zero;
     private bool        m_Grounded      = false;
+
+    public GameObject explode;
 
     // Update is called once per frame
     void Update()
@@ -39,14 +39,10 @@ public class Raycaster : MonoBehaviour
             m_HitPoint = hitInfo.point;     //Store the position that our ray collided with the object
             m_HitNormal = hitInfo.normal;   //Store the surface normal of the object
             m_Grounded = Vector3.Dot(Vector3.up, hitInfo.normal) > 0.5f; //Bit of a magic number here. Just trust me on this one.
-            
-            m_Text.text = $"The ray hit {hitInfo.collider.name}.";
-            m_Text.text += m_Grounded ? "\nThis is the ground!" : "\nThis is NOT the ground.";
+
+            Instantiate(explode, m_HitPoint, transform.rotation);
         }
-        else
-        {
-            m_Text.text = $"The ray hit nothing!";
-        }
+ 
     }
 
     void DoRaycastAll()
@@ -67,19 +63,7 @@ public class Raycaster : MonoBehaviour
             m_HitPoint = hitInfos[0].point;
             m_HitNormal = hitInfos[0].normal;
 
-            //Some string fun in here, can you make sense of it?
-            string printString = "The Ray hit ";
-            printString += hitInfos[0].collider.name;
-            for (int i = 1; i < hitInfos.Length; i++)
-            {
-                printString += $" and {hitInfos[i].collider.name}";
-            }
-            printString += ".";
-            m_Text.text = printString;
-        }
-        else
-        {
-            m_Text.text = $"The ray hit nothing!";
+            GameObject explosion = Instantiate(explode,m_HitPoint, transform.rotation);
         }
     }
 
