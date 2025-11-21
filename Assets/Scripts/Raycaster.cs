@@ -1,9 +1,9 @@
 using UnityEditor.PackageManager;
 using UnityEngine;
+using System.Collections;
 
 public class Raycaster : MonoBehaviour
 {
-    [SerializeField] private bool   m_RaycastAll    = false;
     [SerializeField] private float  m_RayDistance   = 10.0f;
 
     private bool        m_RayHit        = false;
@@ -16,14 +16,12 @@ public class Raycaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!m_RaycastAll)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            DoRaycast();
+            Debug.Log("space pressed");
+                DoRaycast();
         }
-        else
-        {
-            DoRaycastAll();
-        }
+       
     }
 
     void DoRaycast()
@@ -41,31 +39,12 @@ public class Raycaster : MonoBehaviour
             m_Grounded = Vector3.Dot(Vector3.up, hitInfo.normal) > 0.5f; //Bit of a magic number here. Just trust me on this one.
 
             Instantiate(explode, m_HitPoint, transform.rotation);
+
         }
  
     }
 
-    void DoRaycastAll()
-    {
-        RaycastHit[] hitInfos; //gives us information about what we hit (if anything)
-        Ray ray = new Ray(transform.position, -transform.up);
 
-        //Do the raycast. Store the information in hitInfos
-        hitInfos = Physics.RaycastAll(ray, m_RayDistance);
-
-        //We hit something if there are 1 or more results in hitInfos
-        m_RayHit = hitInfos.Length > 0;
-
-        if (m_RayHit)
-        {
-            //We're setting the "hit point" to be the first item in the array
-            //This is NOT necessarily the closest item
-            m_HitPoint = hitInfos[0].point;
-            m_HitNormal = hitInfos[0].normal;
-
-            GameObject explosion = Instantiate(explode,m_HitPoint, transform.rotation);
-        }
-    }
 
     private void OnDrawGizmos()
     {
