@@ -3075,7 +3075,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4642a8bdf9fe754ebf3b48bec4ce6ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_RaycastAll: 0
   m_RayDistance: 10
   explode: {fileID: 6656181079284598017, guid: c5564318f788c90489d42573749a96cc, type: 3}
 --- !u!4 &1248948227
