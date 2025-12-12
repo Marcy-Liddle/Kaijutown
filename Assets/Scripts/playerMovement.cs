@@ -13,9 +13,11 @@ public class playerMovement : MonoBehaviour
 
     //Jumping physics
     public float jumpForce = 10f;
+    public float fallMultiplier = 2.5f; // Multiplies gravity when falling down
+    public float ascendMultiplier = 2f; // Multiplies gravity for ascending to peak of jump
 
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start()
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
 
@@ -37,7 +39,8 @@ public class playerMovement : MonoBehaviour
         }
 
         movePlayer();
-	}
+        ApplyJumpPhysics();
+    }
 
     void movePlayer()
     {
@@ -55,5 +58,19 @@ public class playerMovement : MonoBehaviour
     void jump() 
     {
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpForce, rb.linearVelocity.z); // Initial burst for the jump
+    }
+
+    void ApplyJumpPhysics()
+    {
+        if (rb.linearVelocity.y < 0)
+        {
+            // Falling: Apply fall multiplier to make descent faster
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * fallMultiplier * Time.fixedDeltaTime;
+        } // Rising
+        else if (rb.linearVelocity.y > 0)
+        {
+            // Rising: Change multiplier to make player reach peak of jump faster
+            rb.linearVelocity += Vector3.up * Physics.gravity.y * ascendMultiplier * Time.fixedDeltaTime;
+        }
     }
 }
