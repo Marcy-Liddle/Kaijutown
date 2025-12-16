@@ -1,12 +1,14 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-public class playerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
 
     //Movement variables
     //Grounded movement:
     private Rigidbody rb;
-    public float moveSpeed = 5f;
+    public float moveSpeed = 10f;
     private float moveHorizontal;
 	private float moveForward;
 
@@ -15,6 +17,7 @@ public class playerMovement : MonoBehaviour
     public float fallMultiplier = 2.5f; // Multiplies gravity when falling down
     public float ascendMultiplier = 2f; // Multiplies gravity for ascending to peak of jump
 
+    public GameObject dash;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -38,6 +41,11 @@ public class playerMovement : MonoBehaviour
             jump();
         }
 
+        if (Input.GetButtonDown("Attack"))
+        {
+            dashingAttack();
+        }
+
     }
 
     void FixedUpdate()
@@ -59,7 +67,7 @@ public class playerMovement : MonoBehaviour
         rb.linearVelocity = velocity;
 
         
-
+      
     }
 
     
@@ -85,5 +93,19 @@ public class playerMovement : MonoBehaviour
         }
     }
 
+    void dashingAttack()
+    {
+        float temp = moveSpeed;
+        moveSpeed = 20f;   
+        dashing(moveSpeed, temp);
+    }
    
+    IEnumerator dashing(float moveSpeed, float temp)
+    {
+        Instantiate(dash, transform.position, transform.rotation);
+        yield return new WaitForSeconds(2f);
+        Destroy(dash);  
+        moveSpeed = temp;  
+        
+    }
     }

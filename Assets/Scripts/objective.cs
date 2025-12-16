@@ -31,7 +31,7 @@ public class objective : MonoBehaviour
 
     public void win()
     {
-
+        
     }
 
 }
