@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+	public GameObject feet;
 	// Camera Rotation
 	public float mouseSensitivity = 2f;
 	private float verticalRotation = 0f;
@@ -30,12 +31,13 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
+		//feet = GetComponent<GameObject>();
 		rb = GetComponent<Rigidbody>();
 		rb.freezeRotation = true;
 		cameraTransform = Camera.main.transform;
 
 		// Set the raycast to be slightly beneath the player's feet
-		playerHeight = GetComponent<CapsuleCollider>().height * transform.localScale.y;
+		playerHeight = feet.transform.position.y * transform.localScale.y;
 		raycastDistance = (playerHeight / 2) + 0.2f;
 
 		// Hides the mouse

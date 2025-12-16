@@ -4,12 +4,6 @@ public class playerMovement : MonoBehaviour
 {
 
     //Movement variables
-
-    // Camera Rotation
-    public float mouseSensitivity = 2f;
-    private float verticalRotation = 0f;
-    private Transform cameraTransform;
-
     //Grounded movement:
     private Rigidbody rb;
     public float moveSpeed = 5f;
@@ -22,28 +16,13 @@ public class playerMovement : MonoBehaviour
     public float ascendMultiplier = 2f; // Multiplies gravity for ascending to peak of jump
 
 
-
-    [SerializeField] private float m_RayDistance = 10.0f;
-
-    private bool m_RayHit = false;
-    private Vector3 m_HitPoint = Vector3.zero;
-    private Vector3 m_HitNormal = Vector3.zero;
-    private bool m_Grounded = false;
-
-    public GameObject explode;
-
-
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; //stops the cyclinder from rotating and getting stuck on the floor when trying to move
-        cameraTransform = Camera.main.transform;
+        
 
-        // Hides the mouse
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -52,7 +31,6 @@ public class playerMovement : MonoBehaviour
 		moveHorizontal = Input.GetAxisRaw("Horizontal");
 		moveForward = Input.GetAxisRaw("Vertical");
 
-        RotateCamera();
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -84,16 +62,7 @@ public class playerMovement : MonoBehaviour
 
     }
 
-    void RotateCamera()
-    {
-        float horizontalRotation = Input.GetAxis("Mouse X") * mouseSensitivity;
-        transform.Rotate(0, horizontalRotation, 0);
-
-        verticalRotation -= Input.GetAxis("Mouse Y") * mouseSensitivity;
-        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
-
-        cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
-    }
+    
 
     void jump() 
     {
