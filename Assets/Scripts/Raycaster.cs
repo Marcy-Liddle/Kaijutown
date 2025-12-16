@@ -9,16 +9,16 @@ public class Raycaster : MonoBehaviour
     private bool        m_RayHit        = false;
     private Vector3     m_HitPoint      = Vector3.zero;
     private Vector3     m_HitNormal     = Vector3.zero;
-    private bool        m_Grounded      = false;
 
     public GameObject explode;
+    public GameObject laser;
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown("f"))
         {
-            Debug.Log("space pressed");
+       
                 DoRaycast();
         }
        
@@ -31,15 +31,20 @@ public class Raycaster : MonoBehaviour
 
         //Do the raycast. Store the information in hitInfo
         m_RayHit = Physics.Raycast(ray, out hitInfo, m_RayDistance);
+        
 
         if (m_RayHit)
         {
             m_HitPoint = hitInfo.point;     //Store the position that our ray collided with the object
             m_HitNormal = hitInfo.normal;   //Store the surface normal of the object
-            m_Grounded = Vector3.Dot(Vector3.up, hitInfo.normal) > 0.5f; //Bit of a magic number here. Just trust me on this one.
+          
 
             Instantiate(explode, m_HitPoint, transform.rotation);
 
+        }
+        else
+        {
+            Instantiate(laser, m_HitPoint, transform.rotation);
         }
  
     }
