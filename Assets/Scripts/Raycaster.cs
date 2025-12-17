@@ -5,10 +5,10 @@ using System.Collections;
 public class Raycaster : MonoBehaviour
 {
     
-    // Camera Rotation
+    /*/ Camera Rotation
     public float mouseSensitivity = 2f;
     private float verticalRotation = 0f;
-    private Transform cameraTransform;
+    private Transform cameraTransform;*/
 
     [SerializeField] private float  m_RayDistance   = 10.0f;
 
@@ -22,7 +22,7 @@ public class Raycaster : MonoBehaviour
 
     void Start()
     {
-        cameraTransform = Camera.main.transform;
+        //cameraTransform = Camera.main.transform;
 
         // Hides the mouse
         Cursor.lockState = CursorLockMode.Locked;
@@ -33,7 +33,7 @@ public class Raycaster : MonoBehaviour
     void Update()
     {
        
-
+        
         if (Input.GetKeyDown("f"))
         {
        
@@ -41,7 +41,7 @@ public class Raycaster : MonoBehaviour
         }
        
     }
-    private void LateUpdate()
+    /*private void LateUpdate()
     {
         RotateCamera();
 
@@ -56,7 +56,7 @@ public class Raycaster : MonoBehaviour
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
         cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
-    }
+    }*/
 
     void DoRaycast()
     {

@@ -7,10 +7,4 @@ public class titleScreen : MonoBehaviour
     {
         SceneManager.LoadScene("GameScene");
     }
-
-    public void quitButton()
-    {
-        Application.Quit();
-
-    }
 }

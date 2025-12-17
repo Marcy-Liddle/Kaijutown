@@ -1,10 +1,13 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
+    private AudioSource source;
 
+    public AudioClip[] stomps;
     //Movement variables
     //Grounded movement:
     private Rigidbody rb;
@@ -22,8 +25,11 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        source = GetComponent<AudioSource>();
+     
+
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true; //stops the cyclinder from rotating and getting stuck on the floor when trying to move
+        rb.freezeRotation = true; //stops the player from rotating and getting stuck on the floor when trying to move
         
 
     }
@@ -34,14 +40,13 @@ public class PlayerController : MonoBehaviour
 		moveHorizontal = Input.GetAxisRaw("Horizontal");
 		moveForward = Input.GetAxisRaw("Vertical");
 
-
         if (Input.GetButtonDown("Jump"))
         {
 
             jump();
         }
 
-        if (Input.GetButtonDown("Attack"))
+        if (Input.GetKeyDown("enter"))
         {
             dashingAttack();
         }
@@ -65,9 +70,15 @@ public class PlayerController : MonoBehaviour
         velocity.x = targetVelocity.x;
         velocity.z = targetVelocity.z;
         rb.linearVelocity = velocity;
-
         
-      
+        //if player is moving (and no other stepping sound is playing), play a random stomp sound effect
+        if ((velocity.x != 0 || velocity.z != 0) & source.isPlaying == false)
+        {
+            AudioClip step = stomps[(int)Random.Range(0, stomps.Length)];
+            source.clip = step;
+            source.PlayOneShot(step, 1.0f);
+        
+        }   
     }
 
     
@@ -102,10 +113,20 @@ public class PlayerController : MonoBehaviour
    
     IEnumerator dashing(float moveSpeed, float temp)
     {
+        Vector3 movement = ((transform.right * moveHorizontal) + transform.forward * moveForward).normalized;
+        Vector3 targetVelocity = movement * moveSpeed;
+
+        // Apply movement to the Rigidbody
+        Vector3 velocity = rb.linearVelocity;
+        velocity.x = targetVelocity.x;
+        velocity.z = targetVelocity.z;
+        rb.linearVelocity = velocity;
+
+        rb.linearVelocity = velocity;
         Instantiate(dash, transform.position, transform.rotation);
         yield return new WaitForSeconds(2f);
         Destroy(dash);  
-        moveSpeed = temp;  
+        
         
     }
     }
