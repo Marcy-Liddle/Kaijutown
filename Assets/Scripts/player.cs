@@ -8,7 +8,15 @@ public class PlayerController : MonoBehaviour
     private AudioSource source;
 
     public AudioClip[] stomps;
+
+
     //Movement variables
+
+    // Camera Rotation
+    public float mouseSensitivity = 2f;
+    private float verticalRotation = 0f;
+    private Transform cameraTransform;
+
     //Grounded movement:
     private Rigidbody rb;
     public float moveSpeed = 10f;
@@ -26,7 +34,14 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         source = GetComponent<AudioSource>();
-     
+
+        cameraTransform = Camera.main.transform;
+        Debug.Log(transform.rotation);
+        Debug.Log(cameraTransform.rotation);
+
+        // Hides the mouse
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; //stops the player from rotating and getting stuck on the floor when trying to move
@@ -48,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown("enter"))
         {
+            Debug.Log("Dash");
             dashingAttack();
         }
 
@@ -56,7 +72,28 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         MovePlayer();
+        
         ApplyJumpPhysics();
+    }
+
+    private void LateUpdate()
+    {
+        RotateCamera();
+
+    }
+
+    void RotateCamera()
+    {
+        float horizontalRotation = Input.GetAxis("Mouse X") * mouseSensitivity;
+        transform.Rotate(0, horizontalRotation, 0);
+
+        verticalRotation -= Input.GetAxis("Mouse Y") * mouseSensitivity;
+       
+        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
+
+        cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+      
+
     }
 
     void MovePlayer()

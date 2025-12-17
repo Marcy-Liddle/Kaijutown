@@ -5,10 +5,7 @@ using System.Collections;
 public class Raycaster : MonoBehaviour
 {
     
-    /*/ Camera Rotation
-    public float mouseSensitivity = 2f;
-    private float verticalRotation = 0f;
-    private Transform cameraTransform;*/
+
 
     [SerializeField] private float  m_RayDistance   = 10.0f;
 
@@ -22,11 +19,7 @@ public class Raycaster : MonoBehaviour
 
     void Start()
     {
-        //cameraTransform = Camera.main.transform;
 
-        // Hides the mouse
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -41,22 +34,7 @@ public class Raycaster : MonoBehaviour
         }
        
     }
-    /*private void LateUpdate()
-    {
-        RotateCamera();
 
-    }
-
-    void RotateCamera()
-    {
-        float horizontalRotation = Input.GetAxis("Mouse X") * mouseSensitivity;
-        transform.Rotate(0, horizontalRotation, 0);
-
-        verticalRotation -= Input.GetAxis("Mouse Y") * mouseSensitivity;
-        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
-
-        cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
-    }*/
 
     void DoRaycast()
     {
@@ -66,7 +44,7 @@ public class Raycaster : MonoBehaviour
         //Do the raycast. Store the information in hitInfo
         m_RayHit = Physics.Raycast(ray, out hitInfo, m_RayDistance);
 
-        Instantiate(laser, transform.position + new Vector3( 2.5f, 2.5f, 2.5f), Quaternion.Euler(new Vector3(transform.rotation.x , 90, transform.rotation.z)) );
+        Instantiate(laser, transform.position + new Vector3( 2.5f, 0, 2.5f), Quaternion.Euler(new Vector3(transform.rotation.x , 90, transform.rotation.z)) );
 
         if (m_RayHit)
         {
