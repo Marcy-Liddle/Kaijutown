@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     // Camera Rotation
     public float mouseSensitivity = 2f;
     private float verticalRotation = 0f;
-    private Transform cameraTransform;
+    //private Transform cameraTransform;
 
     //Grounded movement:
     private Rigidbody rb;
@@ -30,14 +30,16 @@ public class PlayerController : MonoBehaviour
 
     public GameObject dash;
 
+    [SerializeField] private GameObject head;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         source = GetComponent<AudioSource>();
 
-        cameraTransform = Camera.main.transform;
-        Debug.Log(transform.rotation);
-        Debug.Log(cameraTransform.rotation);
+        //cameraTransform = Camera.main.transform;
+        //cameraTransform.rotation = body.transform.rotation;
+     
 
         // Hides the mouse
         Cursor.lockState = CursorLockMode.Locked;
@@ -91,7 +93,8 @@ public class PlayerController : MonoBehaviour
        
         verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
 
-        cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+        head.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+        //cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
       
 
     }
