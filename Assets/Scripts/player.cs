@@ -91,9 +91,9 @@ public class PlayerController : MonoBehaviour
 
         verticalRotation -= Input.GetAxis("Mouse Y") * mouseSensitivity;
        
-        verticalRotation = Mathf.Clamp(verticalRotation, -90f, 90f);
+        verticalRotation = Mathf.Clamp(verticalRotation, -35f, 45f);
 
-        head.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+        head.transform.localRotation = Quaternion.Euler(0, 0, verticalRotation);
         //cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
       
 
