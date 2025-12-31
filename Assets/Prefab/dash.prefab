@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1614941517149929560}
   - component: {fileID: 6015432192811153776}
   - component: {fileID: 1416191879938560878}
-  - component: {fileID: 7236596282991541907}
   m_Layer: 0
   m_Name: dash
   m_TagString: attack
@@ -104,18 +103,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &7236596282991541907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 776845908478206849}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e08a0fe2fc51647936f84e904d4f9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5041583985152082175
 GameObject:
   m_ObjectHideFlags: 0

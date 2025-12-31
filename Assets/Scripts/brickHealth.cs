@@ -21,7 +21,7 @@ public class brickHealth : MonoBehaviour
 
     private void OnCollisionEnter(Collision attack) 
     {
-        if (attack.gameObject.tag == "attack")
+        if (attack.gameObject.CompareTag("attack"))
         {
             health -= 3f;
         }
@@ -30,7 +30,7 @@ public class brickHealth : MonoBehaviour
 
     private void OnCollisionStay(Collision attack)
     {
-        if (attack.gameObject.tag == "attack")
+        if (attack.gameObject.CompareTag("attack"))
         {
             health -= 3f;
         }
