@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -29,54 +30,80 @@ public class PlayerController : MonoBehaviour
     public float ascendMultiplier = 2f; // Multiplies gravity for ascending to peak of jump
 
     public GameObject dash;
+    GameObject dashing = null;
+    [SerializeField] private float dashBoost = 2.5f;
+    [SerializeField] private float dashDuration = 1f;
 
-    [SerializeField] private GameObject head;
+    [SerializeField] private GameObject head; 
     [SerializeField] private GameObject body;
+
+    enum moveState
+    {
+        normal,
+        jumping,
+        dashing
+    }
+    moveState moving = moveState.normal;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //gets the audioSource component from the player object
         source = GetComponent<AudioSource>();
 
-        //cameraTransform = Camera.main.transform;
-        //cameraTransform.rotation = body.transform.rotation;
+        //gets the player's rigidbody component for physics & movement
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true; //stops the player from rotating and getting stuck on the floor when trying to move 
 
-
-        // Hides the mouse
+        // Hides the mouse from view
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true; //stops the player from rotating and getting stuck on the floor when trying to move
-
-
     }
+
 
     // Update is called once per frame
     void Update()
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveForward = Input.GetAxisRaw("Vertical");
-
-        if (Input.GetButtonDown("Jump"))
+        
+        //Lets the player jump if they are not currently 
+        if (Input.GetButtonDown("Jump")  & moving == moveState.normal)
         {
-
+            moving = moveState.jumping;
             jump();
         }
 
-        if (Input.GetKeyDown("tab"))
+        //Lets the player use a Dash attack if they are currently moving and not jumping/dashing
+        if (Input.GetKeyDown("tab") & moving == moveState.normal & rb.linearVelocity.z != 0)
         {
-
-            attack();
+            moving = moveState.dashing;
+            StartCoroutine(attack());
         }
 
     }
 
+
     void FixedUpdate()
     {
-        MovePlayer();
+        switch(moving)
+        { 
+            case moveState.dashing:
 
-        ApplyJumpPhysics();
+                break;
+
+            default:
+                MovePlayer();
+                ApplyJumpPhysics();
+                break;
+
+        }
+        
+
+        
     }
 
     private void LateUpdate()
@@ -95,7 +122,7 @@ public class PlayerController : MonoBehaviour
         verticalRotation = Mathf.Clamp(verticalRotation, -35f, 45f);
 
         head.transform.localRotation = Quaternion.Euler(0, 0, verticalRotation);
-        //cameraTransform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+        
 
 
     }
@@ -103,7 +130,7 @@ public class PlayerController : MonoBehaviour
     void MovePlayer()
     {
 
-        Vector3 movement = ((transform.right * moveHorizontal) + transform.forward * moveForward).normalized;
+        Vector3 movement = (transform.right * moveHorizontal) + (transform.forward * moveForward).normalized;
         Vector3 targetVelocity = movement * moveSpeed;
 
         // Apply movement to the Rigidbody
@@ -143,30 +170,32 @@ public class PlayerController : MonoBehaviour
             // Rising: Change multiplier to make player reach peak of jump faster
             rb.linearVelocity += Vector3.up * Physics.gravity.y * ascendMultiplier * Time.fixedDeltaTime;
         }
+        else
+        {
+            moving = moveState.normal;
+        }
     }
 
 
 
-    void attack()
+    IEnumerator attack()
     {
-        Vector3 movement = ((transform.right * moveHorizontal) + transform.forward * moveForward).normalized;
-        Vector3 targetVelocity = movement * moveSpeed * 2;
-        Vector3 velocity = rb.linearVelocity;
-        velocity.x = targetVelocity.x;
-        velocity.z = 0f;
-        rb.linearVelocity = velocity;
-
-
-        GameObject dashing = null;
+       
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, (rb.linearVelocity.z * moveSpeed * dashBoost));
 
         if (dashing == null)
         {
 
             dashing = Instantiate(dash, parent:body.transform, false );
 
-            Destroy(dashing, 2f);
-        }
+            yield return new WaitForSeconds(dashDuration);
 
+            Destroy(dashing);
+            moving = moveState.normal;
+        }
+        else { yield return null; }
+
+        
     }
 
 }

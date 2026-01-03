@@ -1,11 +1,10 @@
-using UnityEditor.PackageManager;
+//using UnityEditor.PackageManager;
 using UnityEngine;
 using System.Collections;
+using System;
 
 public class Raycaster : MonoBehaviour
 {
-    
-
 
     [SerializeField] private float  m_RayDistance   = 10.0f;
 
@@ -16,11 +15,7 @@ public class Raycaster : MonoBehaviour
     public GameObject explode;
     public GameObject laser;
 
-
-    void Start()
-    {
-
-    }
+    public GameObject head;
 
     // Update is called once per frame
     void Update()
@@ -38,20 +33,19 @@ public class Raycaster : MonoBehaviour
 
     void DoRaycast()
     {
-        RaycastHit hitInfo; //gives us information about what we hit (if anything)
+        RaycastHit hitInfo; //gives information about the first ray hit if available
         Ray ray = new Ray(transform.position, -transform.up);
 
         //Do the raycast. Store the information in hitInfo
         m_RayHit = Physics.Raycast(ray, out hitInfo, m_RayDistance);
 
-        Instantiate(laser, transform.position + new Vector3( 2.5f, 0, 2.5f), Quaternion.Euler(new Vector3(transform.rotation.x , 90, transform.rotation.z)) );
+        //create a laser blast
+        Instantiate(laser, parent:head.transform, false);
 
+        //if the laser hits, create an explosion
         if (m_RayHit)
         {
-            m_HitPoint = hitInfo.point;     //Store the position that our ray collided with the object
-            m_HitNormal = hitInfo.normal;   //Store the surface normal of the object
-          
-
+            m_HitPoint = hitInfo.point;     //Stores the position that the ray collided with the object
             Instantiate(explode, m_HitPoint, transform.rotation);
 
         }
@@ -60,6 +54,7 @@ public class Raycaster : MonoBehaviour
 
 
 
+    //draws the rayCast in scene view 
     private void OnDrawGizmos()
     {
         if (m_RayHit)
