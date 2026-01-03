@@ -3724,7 +3724,7 @@ PrefabInstance:
       objectReference: {fileID: 743249829}
     - target: {fileID: 5239333563595653975, guid: fd1a84348b1b1834daf7fad45c64ca99, type: 3}
       propertyPath: m_RayDistance
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 8384445199951247250, guid: fd1a84348b1b1834daf7fad45c64ca99, type: 3}
       propertyPath: m_Name

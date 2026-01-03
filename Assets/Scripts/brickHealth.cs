@@ -8,17 +8,17 @@ public class brickHealth : MonoBehaviour
     [SerializeField] private bool core;
     [SerializeField] private bool final;
 
-   
-    
+ 
     private void Update()
     {
+        //destroys gameObject that script is attached to
         if (health <= 0)
         {
             Destroy(gameObject);
-   
-
         }
     }
+
+    /* Deals damage to objects when collision detects an attack  */
 
     private void OnCollisionEnter(Collision attack) 
     {

@@ -5,16 +5,18 @@ using System;
 
 public class Raycaster : MonoBehaviour
 {
-
+    //how-to make a raycaster variables code taken from lab example
     [SerializeField] private float  m_RayDistance   = 10.0f;
 
-    private bool        m_RayHit        = false;
-    private Vector3     m_HitPoint      = Vector3.zero;
-    private Vector3     m_HitNormal     = Vector3.zero;
+    private bool m_RayHit = false;
+    private Vector3 m_HitPoint = Vector3.zero;
+    private Vector3 m_HitNormal = Vector3.zero;
 
+    //projectiles and effects
     public GameObject explode;
     public GameObject laser;
 
+    //head object reference for rotation
     public GameObject head;
 
     // Update is called once per frame
@@ -55,6 +57,7 @@ public class Raycaster : MonoBehaviour
 
 
     //draws the rayCast in scene view 
+    //taken from lab example
     private void OnDrawGizmos()
     {
         if (m_RayHit)

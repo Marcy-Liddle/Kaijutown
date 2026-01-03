@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class ExplosionBehaviour : MonoBehaviour
 {
+    //explosion noise
     private AudioSource source;
     public AudioClip[] kaboom;
 
@@ -23,7 +24,7 @@ public class ExplosionBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //explosions grow in size
         if (scalable)
         {
             //makes the gameObject grow in size

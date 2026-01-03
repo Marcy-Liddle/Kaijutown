@@ -29,7 +29,9 @@ public class objective : MonoBehaviour
     {
         source = GetComponent<AudioSource>();
 
+        //sets length of core array to the totalCores
         cores = new GameObject[totalCores]; 
+        //sets destroyed check  length to totalCores + 2 (all cores + shield & bunker)
         destroyed = new bool[totalCores + 2];
 
         winTextObject.SetActive(false);
@@ -38,7 +40,6 @@ public class objective : MonoBehaviour
         {
             //Spawn power cores at random locations in the scene
             var position = new Vector3(Random.Range(-200f, 300f), 0, Random.Range(-800f, 100f));
-            
             cores[i] = Instantiate(corePrefab, position, Quaternion.identity) as GameObject ;
             
         }

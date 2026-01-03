@@ -7,17 +7,10 @@ using UnityEngine.Rendering.Universal;
 public class PlayerController : MonoBehaviour
 {
     private AudioSource source;
-
     public AudioClip[] stomps;
 
 
     //Movement variables
-
-    // Camera Rotation
-    public float mouseSensitivity = 2f;
-    private float verticalRotation = 0f;
-    //private Transform cameraTransform;
-
     //Grounded movement:
     private Rigidbody rb;
     public float moveSpeed = 10f;
@@ -29,14 +22,20 @@ public class PlayerController : MonoBehaviour
     public float fallMultiplier = 2.5f; // Multiplies gravity when falling down
     public float ascendMultiplier = 2f; // Multiplies gravity for ascending to peak of jump
 
+    //Dash movement variables
     public GameObject dash;
     GameObject dashing = null;
     [SerializeField] private float dashBoost = 2.5f;
     [SerializeField] private float dashDuration = 1f;
 
-    [SerializeField] private GameObject head; 
+    [SerializeField] private GameObject head;
     [SerializeField] private GameObject body;
 
+    // Camera Rotation
+    public float mouseSensitivity = 2f;
+    private float verticalRotation = 0f;
+  
+    //Simple use of a state machine
     enum moveState
     {
         normal,
@@ -44,7 +43,6 @@ public class PlayerController : MonoBehaviour
         dashing
     }
     moveState moving = moveState.normal;
-
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -67,10 +65,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //get movement input from player
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveForward = Input.GetAxisRaw("Vertical");
         
-        //Lets the player jump if they are not currently 
+        //Lets the player jump if they are not currently jumpung/dashing
         if (Input.GetButtonDown("Jump")  & moving == moveState.normal)
         {
             moving = moveState.jumping;
@@ -89,6 +88,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Checks player state
         switch(moving)
         { 
             case moveState.dashing:
@@ -114,6 +114,7 @@ public class PlayerController : MonoBehaviour
 
     void RotateCamera()
     {
+        //Rotates player using mouse input
         float horizontalRotation = Input.GetAxis("Mouse X") * mouseSensitivity;
         transform.Rotate(0, horizontalRotation, 0);
 
@@ -128,8 +129,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void MovePlayer()
-    {
-
+    { 
         Vector3 movement = (transform.right * moveHorizontal) + (transform.forward * moveForward).normalized;
         Vector3 targetVelocity = movement * moveSpeed;
 
@@ -170,26 +170,29 @@ public class PlayerController : MonoBehaviour
             // Rising: Change multiplier to make player reach peak of jump faster
             rb.linearVelocity += Vector3.up * Physics.gravity.y * ascendMultiplier * Time.fixedDeltaTime;
         }
-        else
+        else //if not jumping or falling from jump, change state back to normal
         {
             moving = moveState.normal;
         }
     }
 
 
-
+    //Coroutine
     IEnumerator attack()
     {
-       
+        //Burst of speed.
         rb.linearVelocity = new Vector3(rb.linearVelocity.x, rb.linearVelocity.y, (rb.linearVelocity.z * moveSpeed * dashBoost));
 
+        //if there is no dash object created, 
         if (dashing == null)
         {
-
+            //create one as child of the player body object,
             dashing = Instantiate(dash, parent:body.transform, false );
 
+            //and return here after the duration.
             yield return new WaitForSeconds(dashDuration);
 
+            //Destroy the dash object (setting back to null) and set state back to normal.
             Destroy(dashing);
             moving = moveState.normal;
         }
