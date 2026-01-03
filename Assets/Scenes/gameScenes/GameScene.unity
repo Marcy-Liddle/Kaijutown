@@ -1611,7 +1611,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4b573d2c8857671478c16d4e829c3f2e, type: 3}
   - {fileID: 8300000, guid: 56f9193879c7a3a47a6c0de65ef1fd07, type: 3}
   - {fileID: 8300000, guid: e1df60e9b79a06747b02b013b0c4501c, type: 3}
-  mouseSensitivity: 2
   moveSpeed: 20
   jumpForce: 15
   fallMultiplier: 5
@@ -1621,6 +1620,7 @@ MonoBehaviour:
   dashDuration: 1
   head: {fileID: 743249829}
   body: {fileID: 872576815}
+  mouseSensitivity: 2
 --- !u!114 &596414987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3678,6 +3678,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1148940275250372175, guid: fd1a84348b1b1834daf7fad45c64ca99, type: 3}
+      propertyPath: Mute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1148940275250372175, guid: fd1a84348b1b1834daf7fad45c64ca99, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1966084716725517316, guid: fd1a84348b1b1834daf7fad45c64ca99, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.095806
@@ -3789,7 +3797,7 @@ AudioSource:
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
-  Mute: 1
+  Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
